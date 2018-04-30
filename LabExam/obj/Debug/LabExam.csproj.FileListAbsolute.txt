@@ -1,0 +1,7 @@
+D:\Courses\LabExam\LabExam\LabExam\bin\Debug\LabExam.exe.config
+D:\Courses\LabExam\LabExam\LabExam\bin\Debug\LabExam.exe
+D:\Courses\LabExam\LabExam\LabExam\bin\Debug\LabExam.pdb
+D:\Courses\LabExam\LabExam\LabExam\obj\Debug\LabExam.csprojResolveAssemblyReference.cache
+D:\Courses\LabExam\LabExam\LabExam\obj\Debug\LabExam.csproj.CoreCompileInputs.cache
+D:\Courses\LabExam\LabExam\LabExam\obj\Debug\LabExam.exe
+D:\Courses\LabExam\LabExam\LabExam\obj\Debug\LabExam.pdb
