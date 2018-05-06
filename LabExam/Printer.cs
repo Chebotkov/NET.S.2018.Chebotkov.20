@@ -4,24 +4,35 @@ using System.IO;
 
 namespace LabExam
 {
-    public class Printer
+    public abstract class Printer
     {
+        public event EventHandler<PrintStartedEventArgs> PrintStarted;
+        public event EventHandler<PrintFinishedEventArgs> PrintFinished;
+        protected ILogger logger;
         private string name;
         private string model;
         
+        /// <summary>
+        /// Initializes a new instance of<see cref="Printer"/>
+        /// </summary>
+        /// <param name="name">Printer name.</param>
+        /// <param name="model">Printer model.</param>
         public Printer(string name, string model)
         {
             Name = name;
             Model = model;
         }
 
+        /// <summary>
+        /// Gets printer name.
+        /// </summary>
         public string Name
         {
             get
             {
                 return name;
             }
-            set
+            private set
             {
                 if (String.IsNullOrEmpty(value))
                 {
@@ -32,13 +43,16 @@ namespace LabExam
             }
         }
 
+        /// <summary>
+        /// Gets printer model.
+        /// </summary>
         public string Model
         {
             get
             {
                 return model;
             }
-            set
+            private set
             {
                 if (String.IsNullOrEmpty(value))
                 {
@@ -49,6 +63,11 @@ namespace LabExam
             }
         }
 
+        /// <summary>
+        /// Compares current instance with specified object.
+        /// </summary>
+        /// <param name="obj">Object.</param>
+        /// <returns>True of two objects are equals. False - another case.</returns>
         public override bool Equals(object obj)
         {
             var printer = obj as Printer;
@@ -57,6 +76,10 @@ namespace LabExam
                    Model == printer.Model;
         }
 
+        /// <summary>
+        /// Calculates hashcode.
+        /// </summary>
+        /// <returns>Hashcode.</returns>
         public override int GetHashCode()
         {
             var hashCode = -1566092560;
@@ -65,17 +88,21 @@ namespace LabExam
             return hashCode;
         }
 
-        public virtual void Print(FileStream fs)
+        /// <summary>
+        /// Implements logic of printing.
+        /// </summary>
+        /// <param name="stream">Certain stream.</param>
+        protected abstract void Printing(Stream stream);
+
+        /// <summary>
+        /// Prints something on the stream.
+        /// </summary>
+        /// <param name="stream">Certain stream.</param>
+        public virtual void Print(Stream stream)
         {
-            //For disposing.
-            using (fs)
-            {
-                for (int i = 0; i < fs.Length; i++)
-                {
-                    // simulate printing
-                    Console.WriteLine(fs.ReadByte());
-                }
-            }
+            PrintStarted(this, new PrintStartedEventArgs(this));
+            Printing(stream);
+            PrintFinished(this, new PrintFinishedEventArgs(this));
         }
     }
 }

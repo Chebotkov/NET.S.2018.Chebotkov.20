@@ -1,23 +1,41 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 
 namespace LabExam
 {
     /// <summary>
-    /// implements logic of logging.
+    /// Implements logic of logging.
     /// </summary>
-    public class Logger
+    public class Logger : ILogger
     {
-        public Logger()
+        /// <summary>
+        /// Initializes a new instance of <see cref="Logger"/>
+        /// </summary>
+        public Logger(Printer printer)
         {
-            PrinterManager.PrintEvent += PrinterManager_PrintEvent;
+            printer.PrintStarted += Printer_PrintStarted;
+            printer.PrintFinished += Printer_PrintFinished;
+        }
+        private void Printer_PrintFinished(object sender, PrintFinishedEventArgs e)
+        {
+            Log(String.Format("Print on {0} - {1} finished.", e.printer.Name, e.printer.Model));
         }
 
-        private void PrinterManager_PrintEvent(object sender, PrintEventArgs e)
+        private void Printer_PrintStarted(object sender, PrintStartedEventArgs e)
+        {
+            Log(String.Format("Print on {0} - {1} started.", e.printer.Name, e.printer.Model));
+        }
+
+        /// <summary>
+        /// Logs the message.
+        /// </summary>
+        /// <param name="message">Logifiable message.</param>
+        public void Log(string message)
         {
             using (StreamWriter f = new StreamWriter("log.txt", true, System.Text.Encoding.Default))
             {
-                f.WriteLine(e.Message);
-            }   
+                f.WriteLine(message);
+            }
         }
     }
 }

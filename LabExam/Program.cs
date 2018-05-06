@@ -3,19 +3,18 @@ using System.Windows.Forms;
 
 namespace LabExam
 {
-    class Program : IView
+    class Program
     {
+        private static PrinterManager printerManager = PrinterManager.Instance;
         [STAThread]
         static void Main(string[] args)
         {
             while (true)
             {
-                Console.WriteLine("Select your choice:");
+                Console.WriteLine("Press:");
                 Console.WriteLine("1:Add new printer");
-                //Нужно убрать 2 и 3 пункт и вместо них добавить пункт "печать", в котором будет выбор принтера, а затем произведётся печать. Не сразу это заметил, поэтому не успел. 
-                Console.WriteLine("2:Print on Canon");
-                Console.WriteLine("3:Print on Epson");
-                Console.WriteLine("4:Show list of printers");
+                Console.WriteLine("2:Print");
+                Console.WriteLine("3:Show list of printers");
                 Console.WriteLine("Ecs:Exit\n");
 
                 var key = Console.ReadKey();
@@ -30,15 +29,33 @@ namespace LabExam
                         }
                     case ConsoleKey.D2:
                         {
-                            Print(new CanonPrinter());
+                            if (printerManager.Printers.Count > 0)
+                            {
+                                Console.Clear();
+                                int i = 1;
+                                foreach (Printer printer in printerManager.Printers)
+                                {
+                                    Console.WriteLine("{0}. {1} {2}", i, printer.Name, printer.Model);
+                                    i++;
+                                }
+                                string choise = Console.ReadLine();
+                                if (Int32.TryParse(choise, out int number) && number <= printerManager.Printers.Count)
+                                {
+                                    Print(printerManager.Printers[number-1]);
+                                }
+                                else
+                                {
+                                    Console.WriteLine("Wrong number!");
+                                }
+                            }
+                            else
+                            {
+                                Console.WriteLine("There is no printers");
+                            }
+
                             break;
                         }
                     case ConsoleKey.D3:
-                        {
-                            Print(new EpsonPrinter());
-                            break;
-                        }
-                    case ConsoleKey.D4:
                         {
                             PrintListOfPrinters();
                             break;
@@ -58,7 +75,7 @@ namespace LabExam
             string fileName = "";
             if (GetFile(ref fileName))
             {
-                PrinterManager.Print(printer, fileName);
+                printerManager.Print(printer, fileName);
             }
             else
             {
@@ -80,15 +97,45 @@ namespace LabExam
 
         private static void CreatePrinter()
         {
+            string name = "RandomPrinter";
+            Printer printer;
+
+            Console.Clear();
+            Console.WriteLine("Choose a model:\n1.Canon\n2.Epson\n3.Other");
+            var key = Console.ReadKey();
+            Console.Clear();
+
             try
             {
-                Console.WriteLine("Enter printer name");
-                string name = Console.ReadLine();
+                if (key.Key == ConsoleKey.D3)
+                {
+                    Console.WriteLine("Enter printer name");
+                    name = Console.ReadLine();
+                }
+
                 Console.WriteLine("Enter printer model");
                 string model = Console.ReadLine();
-                Printer printer = new Printer(name, model);
 
-                if (PrinterManager.Add(printer))
+                switch (key.Key)
+                {
+                    case ConsoleKey.D1:
+                        {
+                            printer = new CanonPrinter(model);
+                            break;
+                        }
+                    case ConsoleKey.D2:
+                        {
+                            printer = new EpsonPrinter(model);
+                            break;
+                        }
+                    default:
+                        {
+                            printer = new RandomPrinter(name, model);
+                            break;
+                        }
+                }
+
+                if (printerManager.Add(printer))
                 {
                     Console.WriteLine("Printer added.");
                 }
@@ -105,12 +152,12 @@ namespace LabExam
 
         private static void PrintListOfPrinters()
         {
-            if (PrinterManager.Printers.Count == 0)
+            if (printerManager.Printers.Count == 0)
             {
                 Console.WriteLine("List is empty.");
             }
-
-            foreach (Printer p in PrinterManager.Printers)
+            
+            foreach (Printer p in printerManager.Printers)
             {
                 Console.WriteLine ("Name: {0}, Model: {1}.", p.Name, p.Model);
             }

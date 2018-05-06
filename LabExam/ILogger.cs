@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace LabExam
 {
-    interface IView
+    public interface ILogger
     {
+        void Log(string message);
     }
 }

@@ -5,3 +5,10 @@ D:\Courses\LabExam\LabExam\LabExam\obj\Debug\LabExam.csprojResolveAssemblyRefere
 D:\Courses\LabExam\LabExam\LabExam\obj\Debug\LabExam.csproj.CoreCompileInputs.cache
 D:\Courses\LabExam\LabExam\LabExam\obj\Debug\LabExam.exe
 D:\Courses\LabExam\LabExam\LabExam\obj\Debug\LabExam.pdb
+D:\Courses\NET.S.2018.Chebotkov.20\LabExam\bin\Debug\LabExam.exe.config
+D:\Courses\NET.S.2018.Chebotkov.20\LabExam\bin\Debug\LabExam.exe
+D:\Courses\NET.S.2018.Chebotkov.20\LabExam\bin\Debug\LabExam.pdb
+D:\Courses\NET.S.2018.Chebotkov.20\LabExam\obj\Debug\LabExam.csprojResolveAssemblyReference.cache
+D:\Courses\NET.S.2018.Chebotkov.20\LabExam\obj\Debug\LabExam.csproj.CoreCompileInputs.cache
+D:\Courses\NET.S.2018.Chebotkov.20\LabExam\obj\Debug\LabExam.exe
+D:\Courses\NET.S.2018.Chebotkov.20\LabExam\obj\Debug\LabExam.pdb

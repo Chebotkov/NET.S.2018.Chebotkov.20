@@ -8,16 +8,15 @@ namespace LabExam
     /// </summary>
     internal class CanonPrinter : Printer
     {
-        public CanonPrinter()
-        {
-            Name = "Canon";
-            Model = "123x";
-        }
+        public CanonPrinter(string model) : base("Canon", model) { }
 
-        public CanonPrinter(string name, string model)
+        protected override void Printing(Stream fs)
         {
-            Name = name;
-            Model = model;
+            for (int i = 0; i < fs.Length; i++)
+            {
+                // simulate printing
+                Console.WriteLine(fs.ReadByte());
+            }
         }
     }
 }

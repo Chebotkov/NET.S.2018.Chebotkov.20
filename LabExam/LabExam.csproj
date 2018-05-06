@@ -43,14 +43,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CanonPrinter.cs" />
-    <Compile Include="IView.cs" />
+    <Compile Include="ILogger.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="EpsonPrinter.cs" />
     <Compile Include="Printer.cs" />
     <Compile Include="PrinterManager.cs" />
-    <Compile Include="PrintEventArgs.cs" />
+    <Compile Include="PrintStartedEventArgs.cs" />
+    <Compile Include="PrintFinishedEventArgs.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RandomPrinter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

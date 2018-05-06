@@ -1,14 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace LabExam
 {
-    /// <summary>
-    /// Implements IPrinter for printing. 
-    /// </summary>
-    internal class EpsonPrinter : Printer
+    public class RandomPrinter : Printer
     {
-        public EpsonPrinter(string model) : base("Epson", model) { }
+        public RandomPrinter(string name, string model) : base(name, model) { }
 
         protected override void Printing(Stream fs)
         {

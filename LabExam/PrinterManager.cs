@@ -1,52 +1,90 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Windows.Forms;
 
 namespace LabExam
 {
-    public delegate void PrinterDelegate(string arg);
-    
-    public static class PrinterManager
+    public sealed class PrinterManager
     {
-        //Universal version. Instead of "Onprinted" event and "PrinterDelegate" delegate.
-        public static event EventHandler<PrintEventArgs> PrintEvent;
-        private static Logger logger = new Logger();
+        /// <summary>
+        /// List of printers.
+        /// </summary>
+        public readonly List<Printer> Printers = new List<Printer>();
 
+        /// <summary>
+        /// Singular instance of <see cref="PrinterManager"/>
+        /// </summary>
+        private static PrinterManager instance;
+
+        /// <summary>
+        /// Initializes a type.
+        /// </summary>
         static PrinterManager()
         {
-            Printers = new List<Printer>();
+            instance = null;
         }
 
-        public static List<Printer> Printers { get; set; }
+        /// <summary>
+        /// Initializes a new instance of <see cref="PrinterManager"/>
+        /// </summary>
+        private PrinterManager() { }
+
+        /// <summary>
+        /// Gets an instance of <see cref="PrinterManager"/>.
+        /// </summary>
+        public static PrinterManager Instance
+        {
+            get
+            {
+                if (instance == null)
+                {
+                    instance = new PrinterManager();
+                }
+
+                return instance;
+            }
+        }
 
         /// <summary>
         /// Returns bool result about adding.
         /// </summary>
-        /// <param name="p1">Printer.</param>
+        /// <param name="printer">Printer.</param>
         /// <returns>True if file was added. False if file already exists.</returns>
-        public static bool Add(Printer p1)
+        public bool Add(Printer printer)
         {
-            if (!Printers.Contains(p1))
+            if (printer == null)
             {
-                Printers.Add(p1);
+                return false;
+            }
+
+            if (!Printers.Contains(printer))
+            {
+                Printers.Add(printer);
                 return true;
             }
 
             return false;
         }
 
-        public static void Print(Printer p1, string FileName)
+        /// <summary>
+        /// Prints current file on specified printer.
+        /// </summary>
+        /// <param name="printer">Wanted printer.</param>
+        /// <param name="FileName">Path to the print file.</param>
+        public void Print(Printer printer, string FileName)
         {
-            if (p1 is null)
+            if (printer is null)
             {
-                throw new ArgumentNullException("{0} is null.", nameof(p1));
+                throw new ArgumentNullException("{0} is null.", nameof(printer));
             }
 
-            PrintEvent(null, new PrintEventArgs(String.Format("Print on {0} started", p1.Name)));
+            if (FileName == null)
+            {
+                throw new ArgumentNullException("{0} is null.", nameof(FileName));
+            }
+            
             var f = File.OpenRead(FileName);
-            p1.Print(f);
-            PrintEvent(null, new PrintEventArgs(String.Format("Print on {0} finished", p1.Name)));
+            printer.Print(f);
         }
     }
 }
