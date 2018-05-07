@@ -10,6 +10,7 @@ namespace LabExam
         /// List of printers.
         /// </summary>
         public readonly List<Printer> Printers = new List<Printer>();
+        public static ILogger logger;
 
         /// <summary>
         /// Singular instance of <see cref="PrinterManager"/>
@@ -39,9 +40,27 @@ namespace LabExam
                 if (instance == null)
                 {
                     instance = new PrinterManager();
+                    logger = new Logger();
                 }
 
                 return instance;
+            }
+        }
+
+
+        /// <summary>
+        /// Gets or sets an instance of <see cref="ILogger"/>.
+        /// </summary>
+        public static ILogger Logger
+        {
+            get
+            {
+                return logger;
+            }
+
+            set
+            {
+                logger = value ?? throw new ArgumentNullException("{0} is null", nameof(value));
             }
         }
 
@@ -50,20 +69,21 @@ namespace LabExam
         /// </summary>
         /// <param name="printer">Printer.</param>
         /// <returns>True if file was added. False if file already exists.</returns>
-        public bool Add(Printer printer)
+        public void Add(Printer printer)
         {
             if (printer == null)
             {
-                return false;
+                throw new ArgumentNullException("{0} is null.", nameof(printer));
             }
 
             if (!Printers.Contains(printer))
             {
                 Printers.Add(printer);
-                return true;
             }
-
-            return false;
+            else
+            {
+                throw new InvalidOperationException("Item already exists.");
+            }
         }
 
         /// <summary>
@@ -82,9 +102,41 @@ namespace LabExam
             {
                 throw new ArgumentNullException("{0} is null.", nameof(FileName));
             }
+
+            printer.PrintStarted += Printer_PrintStarted;
+            printer.PrintFinished += Printer_PrintFinished;
             
             var f = File.OpenRead(FileName);
             printer.Print(f);
+        }
+
+        /// <summary>
+        /// Appears when printing is over.
+        /// </summary>
+        /// <param name="sender">Event publisher.</param>
+        /// <param name="e">PrintFinishedEventArgs class.</param>
+        private void Printer_PrintFinished(object sender, PrintFinishedEventArgs e)
+        {
+            Printer printer = sender as Printer;
+            if (printer != null)
+            {
+                logger.Log(String.Format("Print on {0} - {1} finished", printer.Name, printer.Model));
+            }
+        }
+
+
+        /// <summary>
+        /// Appears when printing started.
+        /// </summary>
+        /// <param name="sender">Event publisher.</param>
+        /// <param name="e">PrintStartedEventArgs class.</param>
+        private void Printer_PrintStarted(object sender, PrintStartedEventArgs e)
+        {
+            Printer printer = sender as Printer;
+            if (printer != null)
+            {
+                logger.Log(String.Format("Print on {0} - {1} started", printer.Name, printer.Model));
+            }
         }
     }
 }

@@ -8,11 +8,11 @@ namespace LabExam
 {
     public class PrintStartedEventArgs : EventArgs
     {
-        public PrintStartedEventArgs(Printer printer)
+        public PrintStartedEventArgs(string message)
         {
-            this.printer = printer;
+            Message = message;
         }
 
-        public Printer printer { get; private set; }
+        public string Message { get; private set; }
     }
 }

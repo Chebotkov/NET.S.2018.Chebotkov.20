@@ -72,6 +72,11 @@ namespace LabExam
 
         private static void Print(Printer printer)
         {
+            if (printer == null)
+            {
+                throw new ArgumentNullException("{0} is null.", nameof(printer));
+            }
+
             string fileName = "";
             if (GetFile(ref fileName))
             {
@@ -85,9 +90,15 @@ namespace LabExam
 
         private static bool GetFile(ref string fileName)
         {
+            if (fileName == null)
+            {
+                throw new ArgumentNullException("{0} is null.", nameof(fileName));
+            }
+
             var o = new OpenFileDialog();
             o.ShowDialog();
-            if (!String.IsNullOrEmpty(o.FileName))
+            fileName = o.FileName;
+            if (!String.IsNullOrEmpty(fileName))
             {
                 return true;
             }
@@ -135,11 +146,12 @@ namespace LabExam
                         }
                 }
 
-                if (printerManager.Add(printer))
+                try 
                 {
+                    printerManager.Add(printer);
                     Console.WriteLine("Printer added.");
                 }
-                else
+                catch(InvalidOperationException)
                 {
                     Console.WriteLine("Printer already exists.");
                 }

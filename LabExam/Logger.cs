@@ -11,19 +11,8 @@ namespace LabExam
         /// <summary>
         /// Initializes a new instance of <see cref="Logger"/>
         /// </summary>
-        public Logger(Printer printer)
+        public Logger()
         {
-            printer.PrintStarted += Printer_PrintStarted;
-            printer.PrintFinished += Printer_PrintFinished;
-        }
-        private void Printer_PrintFinished(object sender, PrintFinishedEventArgs e)
-        {
-            Log(String.Format("Print on {0} - {1} finished.", e.printer.Name, e.printer.Model));
-        }
-
-        private void Printer_PrintStarted(object sender, PrintStartedEventArgs e)
-        {
-            Log(String.Format("Print on {0} - {1} started.", e.printer.Name, e.printer.Model));
         }
 
         /// <summary>

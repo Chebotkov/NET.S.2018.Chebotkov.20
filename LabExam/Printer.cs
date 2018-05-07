@@ -8,7 +8,6 @@ namespace LabExam
     {
         public event EventHandler<PrintStartedEventArgs> PrintStarted;
         public event EventHandler<PrintFinishedEventArgs> PrintFinished;
-        protected ILogger logger;
         private string name;
         private string model;
         
@@ -19,8 +18,8 @@ namespace LabExam
         /// <param name="model">Printer model.</param>
         public Printer(string name, string model)
         {
-            Name = name;
-            Model = model;
+            Name = name ?? throw new ArgumentNullException("{ 0 } is null.", nameof(name));
+            Model = model ?? throw new ArgumentNullException("{ 0 } is null.", nameof(model));
         }
 
         /// <summary>
@@ -34,11 +33,6 @@ namespace LabExam
             }
             private set
             {
-                if (String.IsNullOrEmpty(value))
-                {
-                    throw new ArgumentNullException("{0} is null.", nameof(value));
-                }
-
                 name = value;
             }
         }
@@ -54,11 +48,6 @@ namespace LabExam
             }
             private set
             {
-                if (String.IsNullOrEmpty(value))
-                {
-                    throw new ArgumentNullException("{0} is null.", nameof(value));
-                }
-
                 model = value;
             }
         }
@@ -100,9 +89,9 @@ namespace LabExam
         /// <param name="stream">Certain stream.</param>
         public virtual void Print(Stream stream)
         {
-            PrintStarted(this, new PrintStartedEventArgs(this));
+            PrintStarted?.Invoke(this, new PrintStartedEventArgs("Print started."));
             Printing(stream);
-            PrintFinished(this, new PrintFinishedEventArgs(this));
+            PrintFinished?.Invoke(this, new PrintFinishedEventArgs("Print finished"));
         }
     }
 }
